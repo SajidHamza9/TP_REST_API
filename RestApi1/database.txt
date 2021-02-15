@@ -1,0 +1,10 @@
+db : news
+table: newstab
+
+title 
+content
+date
+idAuthor
+
+
+author : firstName lastName id 
