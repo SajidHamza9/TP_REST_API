@@ -1,10 +1,12 @@
 db : news
 table: newstab
 
-title 
-content
-date
-idAuthor
 
-
-author : firstName lastName id 
+CREATE TABLE `news`.`newstab` ( 
+    `id` INT NOT NULL AUTO_INCREMENT , 
+    `title` VARCHAR(255) NOT NULL , 
+    `content` TEXT NOT NULL , 
+    `date` DATETIME  NOT NULL DEFAULT CURRENT_TIMESTAMP , 
+    PRIMARY KEY (`id`)) ;
+    
+INSERT INTO `newstab` (`id`, `title`, `content`, `date`) VALUES (NULL, 'Perpignan : la justice suspend la réouverture des musées décidée par le maire Louis Aliot', 'Un maire \"ne peut procéder lui-même à cette ouverture\" : le tribunal administratif de Montpellier a suspendu lundi 15 février les arrêtés du maire RN de Perpignan Louis Aliot, qui avait décidé de rouvrir quatre musées municipaux, à l\'encontre des directives sanitaires du gouvernement. \r\n\r\nS\'appuyant sur le décret gouvernemental du 29 octobre 2020 ordonnant la fermeture au plan national des musées et lieux culturels dans le cadre de la lutte contre la pandémie de Covid-19, le juge a suspendu l\'exécution des arrêtés pris le 8 février par l\'élu, a précisé dans un communiqué le tribunal, saisi en référé par le préfet des Pyrénées-Orientales.   \r\n\r\n\"Nous regrettons cette décision qui éloignera encore un temps nos concitoyens durement éprouvés par cette crise sanitaire\", a réagi Louis Aliot sur Twitter, annonçant dans un communiqué distinct qu\'il ferait appel du jugement. \"La culture est un besoin essentiel qui ne demande qu\'à s\'exprimer\", a-t-il ajouté sur Twitter.', CURRENT_DATE());
