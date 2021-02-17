@@ -1,0 +1,349 @@
+openapi: 3.0.1
+info:
+  title: news api
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:8080"
+paths:
+  /news/{id}:
+    get:
+      tags:
+        - news
+      summary: "Recuperer un article"
+      operationId: getArticle
+      parameters:
+        - name: id
+          in: path
+          description: "L'id de l'article"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/News"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RessourceNotFound"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+    put:
+      tags:
+        - news
+      summary: "Mettre à jour un article"
+      operationId: updateNews
+      parameters:
+        - name: id
+          in: path
+          description: "L'id de l'article"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsEssential"
+        required: true
+      responses:
+        "200":
+          description: updated
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadPayload"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RessourceNotFound"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+    delete:
+      tags:
+        - news
+      summary: "Supprimer un article"
+      operationId: deleteNews
+      parameters:
+        - name: id
+          in: path
+          description: "L'id de l'article"
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RessourceNotFound"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+  /news:
+    get:
+      tags:
+        - news
+      summary: "Recuperer toutes les news"
+      operationId: getNews
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            $ref: "#/components/schemas/Params"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsCollection"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/BadPagination"
+                  - $ref: "#/components/schemas/BadSorting"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+    post:
+      tags:
+        - news
+      summary: "ajouter une nouvelle news"
+      operationId: postNews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsEssential"
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/News"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadPayload"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+  /news/last:
+    get:
+      tags:
+        - news
+      summary: "Recuperer le dernier article de la collection"
+      operationId: getLast
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/News"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+  /news/first:
+    get:
+      tags:
+        - news
+      summary: "Recuperer le premier article de la collection"
+      operationId: getFirst
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/News"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+  /news/count:
+    get:
+      tags:
+        - news
+      summary: "Recuperer le nombre des news"
+      operationId: getNumber
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Count"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServerError"
+
+components:
+  schemas:
+    RessourceNotFound:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "ressource not found"
+    NewsEssential:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+      example:
+        title: title
+        content: content
+    Count:
+      type: object
+      properties:
+        number:
+          type: string
+          example: "50"
+    News:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        date:
+          type: string
+          format: date-time
+      example:
+        id: 1
+        title: title
+        content: content
+        date: 04/03/2020
+    BadPayload:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "bad data on payload"
+    Params:
+      type: object
+      properties:
+        offset:
+          minimum: 0
+          type: integer
+        limit:
+          minimum: 1
+          type: integer
+          example: 5
+        sort:
+          type: string
+          example: "date+asc"
+    NewsCollection:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/News"
+        metadata:
+          type: object
+          properties:
+            pagination:
+              $ref: "#/components/schemas/Pagination"
+            sort:
+              $ref: "#/components/schemas/Sort"
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: integer
+          example: 0
+        limit:
+          type: integer
+          example: 5
+        nextOffset:
+          type: integer
+          example: 5
+        previousOffset:
+          type: integer
+          example: 0
+        totalCount:
+          type: integer
+          example: 15
+    Sort:
+      type: object
+      properties:
+        field:
+          type: string
+          example: date
+        order:
+          type: string
+          example: asc
+    BadPagination:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: bad values of pagination
+    BadSorting:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: bad value for sorting
+    ServerError:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: "internal server error, try later !"

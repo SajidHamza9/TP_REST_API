@@ -1,6 +1,7 @@
 const db = require('../db/dbManager');
 const newsModal = require('../Model/newsModal').newsModal;
 
+const serverError={msg: "internal server error, try later !"}
 
 exports.checkArticle=(req,res,next,id)=>{
         db.getArticle(id)
@@ -12,7 +13,7 @@ exports.checkArticle=(req,res,next,id)=>{
                 res.status(404).json({msg: 'ressource not found'})
             }
         })
-        .catch(err =>res.status(500).json(err))
+        .catch(err =>res.status(500).json(serverError))
 }
 
 exports.checkParams=(req,res,next)=>{
@@ -87,7 +88,7 @@ exports.getNews = (req, res) => {
             response.metadata=metadata;
             res.status(200).json(response)
         })
-        .catch(err=> res.status(500).json(err))
+        .catch(err=> res.status(500).json(serverError))
     })
 
         
@@ -103,7 +104,7 @@ exports.getFirst=(req,res,next)=>{
     .then(list=>{
         res.status(200).json(list)
     })
-    .catch(err=> res.status(500).json(err))
+    .catch(err=> res.status(500).json(serverError))
 }
 
 exports.getLast=(req,res,next)=>{
@@ -111,7 +112,7 @@ exports.getLast=(req,res,next)=>{
     .then(last=>{
         res.status(200).json(last)
     })
-    .catch(err=> res.status(500).json(err))
+    .catch(err=> res.status(500).json(serverError))
 }
 
 exports.getFirst=(req,res,next)=>{
@@ -119,7 +120,7 @@ exports.getFirst=(req,res,next)=>{
     .then(first=>{
         res.status(200).json(first)
     })
-    .catch(err=> res.status(500).json(err))
+    .catch(err=> res.status(500).json(serverError))
 }
 
 exports.getNumber=(req,res,next)=>{
@@ -127,7 +128,7 @@ exports.getNumber=(req,res,next)=>{
     .then(number=>{
         res.status(200).json(number)
     })
-    .catch(err=> res.status(500).json(err))
+    .catch(err=> res.status(500).json(serverError))
 }
 
 exports.postNews = (req, res, next) => {
@@ -135,7 +136,7 @@ exports.postNews = (req, res, next) => {
     .then(doc=>{
         res.status(201).json(doc)
     })
-    .catch(err=> res.status(500).json(err))
+    .catch(err=> res.status(500).json(serverError))
 };
 
 exports.updateNews = (req, res, next) => {
@@ -144,7 +145,7 @@ exports.updateNews = (req, res, next) => {
         // what to send ??
         res.status(200).json()
     })
-    .catch(err=> res.status(500).json(err))
+    .catch(err=> res.status(500).json(serverError))
 };
 
 exports.deleteNews = (req, res, next) => {
@@ -152,5 +153,5 @@ exports.deleteNews = (req, res, next) => {
     .then(doc=>{
         res.status(204).send()
     })
-    .catch(err=> res.status(500).json(err))
+    .catch(err=> res.status(500).json(serverError))
 };
